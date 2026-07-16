@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phạm Văn Hòa Priority - Dịch Vụ Mua Thẻ Cào Trực Tuyến 24/7</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        iosBlue: '#007AFF',
+                        iosGreen: '#34C759',
+                        iosRed: '#FF3B30',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Liquid Glass Effect */
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px) saturate(190%);
+            -webkit-backdrop-filter: blur(20px) saturate(190%);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+        .dark .liquid-glass {
+            background: rgba(28, 28, 30, 0.75);
+            backdrop-filter: blur(20px) saturate(140%);
+            -webkit-backdrop-filter: blur(20px) saturate(140%);
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+        .glass-btn {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .glass-btn:active {
+            transform: scale(0.96);
+        }
+        
+        .dark .selected-network-glow {
+            border-color: #34C759 !important;
+            box-shadow: 0 0 25px rgba(52, 211, 153, 0.65), inset 0 0 10px rgba(52, 211, 153, 0.3) !important;
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        .selected-network-glow {
+            border-color: #34C759 !important;
+            box-shadow: 0 0 20px rgba(52, 199, 89, 0.45) !important;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 15px rgba(52, 211, 153, 0.4), inset 0 0 5px rgba(52, 211, 153, 0.2);
+            }
+            100% {
+                box-shadow: 0 0 30px rgba(52, 211, 153, 0.8), inset 0 0 15px rgba(52, 211, 153, 0.4);
+            }
+        }
+        /* Custom Scrollbar cho Lịch sử giao dịch */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#E4E9F2] to-[#E2E8F0] dark:from-[#0F172A] dark:to-[#1E293B] min-h-screen text-slate-900 dark:text-slate-50 transition-colors duration-500 font-sans pb-12">
+
+    <!-- Header / Mode Switcher -->
+    <header class="max-w-4xl mx-auto px-4 pt-6 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-iosGreen flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+                <i data-lucide="shield-check" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <span class="font-black text-lg tracking-tight block leading-tight">Phạm Văn Hòa Priority</span>
+                <span class="text-[10px] uppercase tracking-wider opacity-85 font-black block">Dịch vụ mua thẻ cào trực tuyến 24/7</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <!-- Khu vực nút Auth nhanh -->
+            <div id="quickAuthArea">
+                <button onclick="openAuthModal('login')" class="glass-btn liquid-glass px-4 py-2.5 rounded-full text-xs font-black flex items-center gap-1.5 hover:opacity-85 border-2">
+                    <i data-lucide="user" class="w-4 h-4"></i> Tài khoản
+                </button>
+            </div>
+            <button id="themeToggle" class="w-10 h-10 rounded-full liquid-glass flex items-center justify-center cursor-pointer hover:opacity-80 transition border-2">
+                <i id="themeIcon" data-lucide="sun" class="w-5 h-5 text-amber-500 dark:text-blue-400"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 mt-8 space-y-6">
+        
+        <!-- Khối Mua Thẻ -->
+        <div class="liquid-glass rounded-3xl p-6 md:p-8">
+            
+            <!-- Bước 1: Chọn Nhà Mạng -->
+            <section class="mb-8">
+                <h2 class="text-lg font-black mb-4 flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-iosGreen text-white flex items-center justify-center text-sm font-black">1</span>
+                    Chọn nhà mạng
+                </h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="networkGrid">
+                    <!-- Javascript renders logos here -->
+                </div>
+            </section>
+
+            <!-- Bước 2: Chọn Mệnh Giá -->
+            <section class="mb-8">
+                <h2 class="text-lg font-black mb-4 flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-iosGreen text-white flex items-center justify-center text-sm font-black">2</span>
+                    Chọn mệnh giá
+                </h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="denomGrid">
+                    <!-- Javascript renders denoms here -->
+                </div>
+            </section>
+
+            <!-- Bước 3: Số Lượng & Email -->
+            <section class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h2 class="text-lg font-black mb-4 flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-full bg-iosGreen text-white flex items-center justify-center text-sm font-black">3</span>
+                        Số lượng thẻ (Có thể nhập tay)
+                    </h2>
+                    <div class="flex items-center gap-4 liquid-glass rounded-2xl p-2 w-fit border-2">
+                        <button id="btnMinus" class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-black hover:opacity-80 active:scale-95 transition">-</button>
+                        <input type="number" id="qtyInput" value="0" min="0" class="text-xl font-black w-16 text-center bg-transparent border-none focus:outline-none focus:ring-0 [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:margin-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:margin-0 [&::-webkit-inner-spin-button]:appearance-none">
+                        <button id="btnPlus" class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-black hover:opacity-80 active:scale-95 transition">+</button>
+                    </div>
+                    <p id="qtyWarning" class="text-xs text-amber-600 dark:text-amber-400 mt-2 font-bold">Vui lòng chọn mệnh giá thẻ trước khi tăng số lượng.</p>
+                </div>
+
+                <div>
+                    <h2 class="text-lg font-black mb-4 flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-full bg-iosGreen text-white flex items-center justify-center text-sm font-black">4</span>
+                        Thông tin nhận thẻ
+                    </h2>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                        </span>
+                        <input type="email" id="emailInput" placeholder="Nhập Gmail của bạn..." class="w-full pl-11 pr-4 py-3.5 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white/50 dark:bg-black/20 font-bold focus:outline-none focus:ring-2 focus:ring-iosGreen focus:border-iosGreen transition">
+                    </div>
+                </div>
+            </section>
+
+            <hr class="border-slate-300 dark:border-slate-700 my-6">
+
+            <!-- Tính Tổng & Nút Đặt Mua -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm opacity-80 font-bold">Tổng cộng cần thanh toán:</p>
+                    <p id="totalPrice" class="text-3xl font-black text-slate-950 dark:text-white">0đ</p>
+                    <p id="adminBadge" class="text-xs text-emerald-500 font-extrabold hidden mt-1">👑 ĐẶC QUYỀN ADMIN: MIỄN PHÍ 100%</p>
+                </div>
+                <button id="btnOrder" class="glass-btn bg-iosGreen hover:bg-[#2fb350] text-white font-black py-4 px-8 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/30 w-full sm:w-auto text-base">
+                    Đặt Mua Ngay
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Khối Lịch Sử Giao Dịch & Quản Lý Tài Khoản -->
+        <div id="userDashboard" class="liquid-glass rounded-3xl p-6 md:p-8 hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b-2 border-slate-300 dark:border-slate-700">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-iosGreen/10 text-iosGreen flex items-center justify-center">
+                        <i data-lucide="user-check" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-lg" id="dashboardUsername">Xin chào, Khách</h3>
+                        <p class="text-xs opacity-80 font-bold" id="dashboardEmail">User@gmail.com</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="glass-btn bg-iosRed/10 hover:bg-iosRed/20 text-iosRed text-xs font-black py-2.5 px-5 rounded-xl flex items-center gap-1.5 transition self-start sm:self-center border border-iosRed/30">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Đăng xuất
+                </button>
+            </div>
+
+            <div>
+                <h3 class="font-black text-base mb-4 flex items-center gap-2">
+                    <i data-lucide="history" class="w-5 h-5 text-iosGreen"></i>
+                    Lịch sử mua thẻ cào
+                </h3>
+                <div class="overflow-x-auto custom-scroll">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b-2 border-slate-300 dark:border-slate-700 text-xs opacity-85 font-black uppercase">
+                                <th class="py-3 px-2">Thời gian</th>
+                                <th class="py-3 px-2">Nhà mạng</th>
+                                <th class="py-3 px-2">Mệnh giá</th>
+                                <th class="py-3 px-2">Số lượng</th>
+                                <th class="py-3 px-2 text-right">Tổng tiền</th>
+                                <th class="py-3 px-2 text-center">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- JS renders history row here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal AUTH (Đăng nhập / Đăng ký / Quên mật khẩu) -->
+    <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-end sm:items-center justify-center opacity-0 pointer-events-none transition-all duration-300 p-4">
+        <div class="w-full max-w-lg liquid-glass rounded-t-[32px] sm:rounded-[32px] p-6 transform translate-y-10 transition-all duration-300 max-h-[90vh] overflow-y-auto custom-scroll" id="authModalContent">
+            
+            <div class="w-12 h-1.5 bg-slate-400/50 rounded-full mx-auto mb-5 sm:hidden"></div>
+            
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="authModalTitle" class="text-2xl font-black tracking-tight text-iosGreen">Đăng nhập</h3>
+                <button onclick="closeAuthModal()" class="w-9 h-9 rounded-full bg-slate-200/50 dark:bg-slate-800/50 flex items-center justify-center border border-slate-300 dark:border-slate-700">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Form chính -->
+            <div class="space-y-4">
+                
+                <!-- FIELD: TÊN ĐĂNG NHẬP -->
+                <div id="divUsername">
+                    <label class="text-sm font-black text-slate-800 dark:text-slate-200 block mb-1">TÊN ĐĂNG NHẬP <span class="text-iosRed">*</span></label>
+                    <input type="text" id="authUsername" placeholder="Nhập tên đăng nhập viết liền không dấu..." class="w-full px-4 py-3 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white/50 dark:bg-black/30 font-bold focus:outline-none focus:ring-2 focus:ring-iosGreen focus:border-iosGreen transition">
+                </div>
+
+                <!-- FIELD: HỌ VÀ TÊN (Chỉ Đăng ký) -->
+                <div id="divFullName" class="hidden">
+                    <label class="text-sm font-black text-slate-800 dark:text-slate-200 block mb-1">HỌ VÀ TÊN <span class="text-iosRed">*</span></label>
+                    <input type="text" id="authFullName" placeholder="Nhập họ và tên có dấu..." class="w-full px-4 py-3 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white/50 dark:bg-black/30 font-bold focus:outline-none focus:ring-2 focus:ring-iosGreen focus:border-iosGreen transition">
+                </div>
+
+                <!-- FIELD: SỐ ĐIỆN THOẠI (Đăng ký & Quên mật khẩu) -->
+                <div id="divPhoneNumber" class="hidden">
+                    <label class="text-sm font-black text-slate-800 dark:text-slate-200 block mb-1">SỐ ĐIỆN THOẠI <span class="text-iosRed">*</span></label>
+                    <input type="tel" id="authPhone" placeholder="Nhập số điện thoại của bạn..." class="w-full px-4 py-3 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white/50 dark:bg-black/30 font-bold focus:outline-none focus:ring-2 focus:ring-iosGreen focus:border-iosGreen transition">
+                </div>
+
+                <!-- FIELD: SỐ CCCD (Đăng ký & Quên mật khẩu) -->
+                <div id="divCCCD" class="hidden">
+                    <label class="text-sm font-black text-slate-800 dark:text-slate-200 block mb-1">SỐ CCCD (CĂN CƯỚC CÔNG DÂN) <span class="text-iosRed">*</span></label>
+                    <input type="text" id="authCCCD" placeholder="Nhập số CCCD gồm 12 số..." class="w-full px-4 py-3 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white/50 dark:bg-black/30 font-bold focus:outline-none focus:ring-2 focus:ring-iosGreen focus:border-iosGreen transition">
+                </div>
+
+                <!-- FIELD: EMAIL (Chỉ Đăng ký) -->
+                <div id="divEmail" class="hidden">
+                    <label class="text-sm font-black text-slate-800 dark:text-slate-200 block mb-1">ĐỊA CHỈ GMAIL <span class="text-iosRed">*</span></label>
+                    <input type="email" id="authEmail" placeholder="name@gmail.com" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white/50 dark:bg-black/30 font-bold focus:outline-none focus:ring-2 focus:ring-iosGreen focus:border-iosGreen transition">
+                </div>
+                
+                <!-- FIELD: MẬT KHẨU -->
+                <div id="divPassword">
+                    <label id="lblPassword" class="text-sm font-black text-slate-800 dark:text-slate-200 block mb-1">MẬT KHẨU <span class="text-iosRed">*</span></label>
+                    <input type="password" id="authPassword" placeholder="Nhập mật khẩu..." class="w-full px-4 py-3 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white/50 dark:bg-black/30 font-bold focus:outline-none focus:ring-2 focus:ring-iosGreen focus:border-iosGreen transition">
+                </div>
+
+                <!-- FIELD: NHẬP LẠI MẬT KHẨU (Đăng ký & Quên mật khẩu) -->
+                <div id="divConfirmPassword" class="hidden">
+                    <label id="lblConfirmPassword" class="text-sm font-black text-slate-800 dark:text-slate-200 block mb-1">NHẬP LẠI MẬT KHẨU <span class="text-iosRed">*</span></label>
+                    <input type="password" id="authConfirmPassword" placeholder="Nhập lại mật khẩu để xác nhận..." class="w-full px-4 py-3 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white/50 dark:bg-black/30 font-bold focus:outline-none focus:ring-2 focus:ring-iosGreen focus:border-iosGreen transition">
+                </div>
+
+                <!-- FIELD: MÃ KEY BẢO MẬT (Đăng ký & Quên mật khẩu) -->
+                <div id="divSecurityKey" class="hidden">
+                    <label class="text-sm font-black text-slate-800 dark:text-slate-200 block mb-1">MÃ KEY BẢO MẬT (6 SỐ TỰ CHỌN) <span class="text-iosRed">*</span></label>
+                    <input type="password" id="authSecurityKey" maxlength="6" placeholder="Ví dụ: 123456" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white/50 dark:bg-black/30 font-bold text-center tracking-[0.5em] text-lg focus:outline-none focus:ring-2 focus:ring-iosGreen focus:border-iosGreen transition">
+                    <p class="text-[10px] text-amber-600 dark:text-amber-400 font-bold mt-1">Lưu ý: Mã này dùng để lấy lại mật khẩu nếu bị quên. Tuyệt đối không chia sẻ cho ai!</p>
+                </div>
+
+                <!-- Nút Submit chính -->
+                <button id="btnAuthSubmit" class="glass-btn bg-iosGreen hover:bg-emerald-600 text-white font-black py-4 rounded-2xl w-full mt-2 shadow-lg shadow-emerald-500/20 text-base">
+                    Xác nhận
+                </button>
+
+                <!-- Footer điều hướng trạng thái -->
+                <div class="text-sm text-center space-y-3 pt-4 border-t border-slate-300/40 dark:border-slate-700/40 font-bold text-slate-700 dark:text-slate-300" id="authModalFooter">
+                    <p id="toggleToRegister">Chưa có tài khoản? <a href="#" onclick="switchAuthState('register')" class="text-iosGreen font-black underline hover:text-emerald-500">Đăng ký ngay</a></p>
+                    <p id="toggleToLogin" class="hidden">Đã có tài khoản? <a href="#" onclick="switchAuthState('login')" class="text-iosGreen font-black underline hover:text-emerald-500">Đăng nhập ngay</a></p>
+                    <p id="toggleToForgot"><a href="#" onclick="switchAuthState('forgot')" class="underline hover:text-slate-500 text-rose-500">Quên mật khẩu?</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thanh Toán QR -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center opacity-0 pointer-events-none transition-all duration-300 p-4">
+        <div class="w-full max-w-md liquid-glass rounded-t-[32px] sm:rounded-[32px] p-6 text-center transform translate-y-10 transition-all duration-300" id="modalContent">
+            
+            <div class="w-12 h-1.5 bg-slate-400/50 rounded-full mx-auto mb-5 sm:hidden"></div>
+            
+            <h3 class="text-xl font-black mb-1" id="paymentTitle">Quét mã VietQR</h3>
+            <p class="text-xs text-rose-500 dark:text-rose-400 font-black mb-4 flex items-center justify-center gap-1" id="paymentCountdownArea">
+                <i data-lucide="clock" class="w-4 h-4"></i>
+                Mã QR sẽ hết hạn sau: <span id="countdown">16:59</span>
+            </p>
+
+            <!-- QR Container -->
+            <div id="qrContainer" class="bg-white p-4 rounded-3xl inline-block shadow-inner mb-4 relative">
+                <img id="qrImage" src="" alt="VietQR Code" class="w-52 h-52 mx-auto">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="bg-white p-1 rounded-lg shadow-md w-10 h-10 flex items-center justify-center">
+                        <span class="text-[9px] font-black text-red-600 leading-none">TCB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thông tin chuyển khoản -->
+            <div class="bg-slate-100 dark:bg-black/30 rounded-2xl p-4 text-left text-sm space-y-2 mb-6 border-2 border-slate-300 dark:border-slate-700">
+                <div class="flex justify-between font-bold"><span class="opacity-70">Ngân hàng:</span><span class="font-black">Techcombank</span></div>
+                <div class="flex justify-between font-bold"><span class="opacity-70">Số tài khoản:</span><span class="font-mono font-black text-iosGreen">99999999983868</span></div>
+                <div class="flex justify-between font-bold"><span class="opacity-70">Chủ tài khoản:</span><span class="font-black">PHAM VAN HOA</span></div>
+                <div class="flex justify-between font-bold"><span class="opacity-70">Số tiền:</span><span id="qrAmount" class="font-black text-slate-950 dark:text-white">0đ</span></div>
+                <div class="flex justify-between font-bold"><span class="opacity-70">Nội dung:</span><span id="qrMemo" class="font-mono font-black bg-emerald-100 dark:bg-emerald-950/50 px-1.5 rounded">MUA THE</span></div>
+            </div>
+
+            <!-- Các nút hành động -->
+            <div class="grid grid-cols-2 gap-4">
+                <button id="btnCancel" class="glass-btn bg-iosRed hover:bg-red-600 text-white font-black py-3.5 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-red-500/20">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                    Hủy bỏ
+                </button>
+                <button id="btnPaid" class="glass-btn bg-[#1C7D3C] hover:bg-[#15602D] text-white font-black py-3.5 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-green-700/20">
+                    <i data-lucide="check" class="w-5 h-5"></i>
+                    Đã thanh toán
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Alert Thông báo Thành Công -->
+    <div id="successAlert" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="liquid-glass max-w-md w-full rounded-[30px] p-6 text-center transform scale-95 transition-transform">
+            <div class="w-20 h-20 bg-iosGreen/10 text-iosGreen rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="party-popper" class="w-12 h-12"></i>
+            </div>
+            <h3 class="text-2xl font-black mb-4">Đặt hàng thành công!</h3>
+            <p class="text-sm opacity-95 leading-relaxed mb-6 font-bold">
+                Quý khách đã thanh toán thành công. Vui lòng chờ trong giây lát mã thẻ sẽ được gửi về gmail của quý khách: <br><strong class="text-iosGreen font-black" id="targetEmail"></strong>. <br>Xin cảm ơn!
+            </p>
+            <button id="btnCloseAlert" class="glass-btn bg-iosGreen text-white font-black py-3.5 px-8 rounded-2xl w-full">
+                Đóng
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Khởi tạo cơ sở dữ liệu và tài khoản quản trị tối cao (Admin)
+        function initAdminAccount() {
+            let accounts = JSON.parse(localStorage.getItem('user_accounts')) || [];
+            
+            // Tìm tài khoản ADMIN22122002 trong DB
+            const hasAdmin = accounts.some(acc => acc.username.toUpperCase() === 'ADMIN22122002');
+            
+            if (!hasAdmin) {
+                const adminAccount = {
+                    username: 'ADMIN22122002',
+                    fullName: 'ADMIN',
+                    phone: '0999999999',
+                    cccd: '999999999999',
+                    email: 'admin22122002@gmail.com',
+                    password: 'ADMIN22122002@@',
+                    securityKey: '221202',
+                    history: []
+                };
+                accounts.push(adminAccount);
+                localStorage.setItem('user_accounts', JSON.stringify(accounts));
+            }
+        }
+        initAdminAccount();
+
+        // Dữ liệu nhà mạng
+        const networks = [
+            { id: 'viettel', name: 'Viettel', logo: 'https://inhoangkien.vn/wp-content/uploads/2022/11/Logo-Tap-doan-vien-thong-Viettel-Moi-02-01-768x480.jpg' },
+            { id: 'vinaphone', name: 'Vinaphone', logo: 'https://inhoangkien.vn/wp-content/uploads/2022/11/Logo-Vinaphone-Vector-New-2-01-600x228.jpg' },
+            { id: 'mobifone', name: 'Mobifone', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8ADqmU1mmA9MiaMYOeWK-IlcUhLF2mN9L6qt5nejLvg&s=10' },
+            { id: 'vietnamobile', name: 'Vietnamobile', logo: 'https://inviva.vn/wp-content/uploads/2026/04/logo-vietnamobile-vector-01.jpg' },
+            { id: 'gmobile', name: 'Gmobile', logo: 'https://upload.wikimedia.org/wikipedia/vi/e/ed/G-mobile.jpg' },
+            { id: 'garena', name: 'Garena', logo: 'https://scontent.fhan4-4.fna.fbcdn.net/v/t39.30808-6/354606845_309810301379114_4778380596147920872_n.png?stp=dst-png&cstp=mx362x362&ctp=s362x362&_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFCGj1_wG3UKwx47m5qDBSdAn0jFKzEidsCfSMUrMSJ266b2rI-zbNnUe-xLKW6p0elwvFPSXZW6dDjz6J4M-WM&_nc_ohc=Lkidkm090-YQ7kNvwFw4Nho&_nc_oc=AdrP6HYWlLLG6EhdXgO4c2BkUh8qX5I24y1ANE2j0s1MyWmh0AnY8xra4wIscCnZNis&_nc_zt=23&_nc_ht=scontent.fhan4-4.fna&_nc_gid=nb9iyeMZbSPWr1qiR9ozGQ&_nc_ss=7b2a8&oh=00_AQBkuia7eAJxEev0HScPgGrIeUatVypONj_r1j7JXA4Wxw&oe=6A5E82C7' }
+        ];
+
+        const denominations = [10000, 20000, 50000, 100000, 200000, 500000, 1000000];
+
+        // Trạng thái ứng dụng
+        let selectedNetwork = 'viettel';
+        let selectedDenom = null;
+        let quantity = 0;
+        let timer = null;
+        let authState = 'login'; 
+        let currentUser = null;  
+
+        const qtyInput = document.getElementById('qtyInput');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNetworks();
+            renderDenominations();
+            updateTotal();
+            checkLoginSession();
+            lucide.createIcons();
+
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                const isDark = document.documentElement.classList.contains('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                updateThemeIcon();
+                renderNetworks();
+            });
+
+            if (localStorage.getItem('theme') === 'light') {
+                document.documentElement.classList.remove('dark');
+                updateThemeIcon();
+            }
+
+            qtyInput.addEventListener('input', (e) => {
+                let val = parseInt(e.target.value);
+                if (selectedDenom === null) {
+                    alert('Vui lòng chọn một mệnh giá thẻ trước!');
+                    qtyInput.value = 0;
+                    quantity = 0;
+                    updateTotal();
+                    return;
+                }
+                if (isNaN(val) || val < 0) val = 0;
+                quantity = val;
+                updateTotal();
+            });
+
+            qtyInput.addEventListener('blur', () => {
+                if (qtyInput.value === '' || parseInt(qtyInput.value) <= 0) {
+                    quantity = selectedDenom !== null ? 1 : 0;
+                    qtyInput.value = quantity;
+                    updateTotal();
+                }
+            });
+
+            document.getElementById('btnAuthSubmit').addEventListener('click', handleAuthSubmit);
+        });
+
+        function updateThemeIcon() {
+            const icon = document.getElementById('themeIcon');
+            const isDark = document.documentElement.classList.contains('dark');
+            icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            lucide.createIcons();
+        }
+
+        // Render nhà mạng
+        function renderNetworks() {
+            const container = document.getElementById('networkGrid');
+            container.innerHTML = networks.map(net => {
+                const isSelected = selectedNetwork === net.id;
+                const borderClass = isSelected 
+                    ? 'selected-network-glow scale-105 border-2 border-iosGreen' 
+                    : 'border-transparent hover:border-slate-300 dark:hover:border-slate-700 border-2';
+
+                return `
+                    <button onclick="selectNetwork('${net.id}')" id="net-${net.id}" class="glass-btn liquid-glass p-4 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all ${borderClass}">
+                        <img src="${net.logo}" alt="${net.name}" class="h-12 w-auto object-contain rounded-lg">
+                        <span class="text-xs font-black">${net.name}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        window.selectNetwork = function(id) {
+            selectedNetwork = id;
+            renderNetworks();
+        }
+
+        // Render mệnh giá
+        function renderDenominations() {
+            const container = document.getElementById('denomGrid');
+            container.innerHTML = denominations.map(val => `
+                <button onclick="selectDenom(${val})" id="denom-${val}" class="glass-btn liquid-glass py-4 px-3 rounded-xl font-black text-base transition-all border-2 ${selectedDenom === val ? 'border-iosGreen ring-2 ring-iosGreen/20 scale-[1.03] text-iosGreen' : 'border-transparent' }">
+                    ${val.toLocaleString('vi-VN')} đ
+                </button>
+            `).join('');
+        }
+
+        window.selectDenom = function(val) {
+            selectedDenom = val;
+            if (quantity === 0) {
+                quantity = 1;
+                qtyInput.value = quantity;
+                document.getElementById('qtyWarning').classList.add('hidden');
+            }
+            renderDenominations();
+            updateTotal();
+        }
+
+        document.getElementById('btnMinus').addEventListener('click', () => {
+            if (selectedDenom === null) return alert('Vui lòng chọn một mệnh giá thẻ trước!');
+            if (quantity > 1) {
+                quantity--;
+                qtyInput.value = quantity;
+                updateTotal();
+            }
+        });
+
+        document.getElementById('btnPlus').addEventListener('click', () => {
+            if (selectedDenom === null) return alert('Vui lòng chọn một mệnh giá thẻ trước!');
+            quantity++;
+            qtyInput.value = quantity;
+            updateTotal();
+        });
+
+        // TÍNH TỔNG TIỀN (ÁP DỤNG ĐẶC QUYỀN ADMIN FREE 100%)
+        function updateTotal() {
+            const isAdmin = currentUser && currentUser.username.toUpperCase() === 'ADMIN22122002';
+            const rawTotal = (selectedDenom || 0) * quantity;
+            
+            if (isAdmin) {
+                document.getElementById('totalPrice').innerText = '0 đ';
+                document.getElementById('adminBadge').classList.remove('hidden');
+            } else {
+                document.getElementById('totalPrice').innerText = rawTotal.toLocaleString('vi-VN') + ' đ';
+                document.getElementById('adminBadge').classList.add('hidden');
+            }
+        }
+
+        /* --- PHẦN LOGIC AUTH & KHÔI PHỤC MẬT KHẨU --- */
+        
+        function openAuthModal(type = 'login') {
+            switchAuthState(type);
+            const modal = document.getElementById('authModal');
+            const content = document.getElementById('authModalContent');
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            content.classList.remove('translate-y-10');
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('authModal');
+            const content = document.getElementById('authModalContent');
+            modal.classList.add('pointer-events-none', 'opacity-0');
+            content.classList.add('translate-y-10');
+            clearAuthForm();
+        }
+
+        function clearAuthForm() {
+            document.getElementById('authUsername').value = '';
+            document.getElementById('authFullName').value = '';
+            document.getElementById('authPhone').value = '';
+            document.getElementById('authCCCD').value = '';
+            document.getElementById('authEmail').value = '';
+            document.getElementById('authPassword').value = '';
+            document.getElementById('authConfirmPassword').value = '';
+            document.getElementById('authSecurityKey').value = '';
+        }
+
+        function switchAuthState(state) {
+            authState = state;
+            const title = document.getElementById('authModalTitle');
+            const btnSubmit = document.getElementById('btnAuthSubmit');
+            
+            const dUsername = document.getElementById('divUsername');
+            const dFullName = document.getElementById('divFullName');
+            const dPhone = document.getElementById('divPhoneNumber');
+            const dCCCD = document.getElementById('divCCCD');
+            const dEmail = document.getElementById('divEmail');
+            const dPassword = document.getElementById('divPassword');
+            const dConfirmPassword = document.getElementById('divConfirmPassword');
+            const dSecurityKey = document.getElementById('divSecurityKey');
+
+            const lblPassword = document.getElementById('lblPassword');
+            const lblConfirmPassword = document.getElementById('lblConfirmPassword');
+
+            const rToggle = document.getElementById('toggleToRegister');
+            const lToggle = document.getElementById('toggleToLogin');
+            const fToggle = document.getElementById('toggleToForgot');
+
+            dUsername.classList.add('hidden');
+            dFullName.classList.add('hidden');
+            dPhone.classList.add('hidden');
+            dCCCD.classList.add('hidden');
+            dEmail.classList.add('hidden');
+            dPassword.classList.add('hidden');
+            dConfirmPassword.classList.add('hidden');
+            dSecurityKey.classList.add('hidden');
+
+            rToggle.classList.add('hidden');
+            lToggle.classList.add('hidden');
+            fToggle.classList.add('hidden');
+
+            if (state === 'login') {
+                title.innerText = 'Đăng nhập';
+                lblPassword.innerText = 'MẬT KHẨU *';
+                document.getElementById('authPassword').placeholder = "Nhập mật khẩu...";
+                
+                dUsername.classList.remove('hidden');
+                dPassword.classList.remove('hidden');
+
+                rToggle.classList.remove('hidden');
+                fToggle.classList.remove('hidden');
+                btnSubmit.innerText = 'ĐĂNG NHẬP NGAY';
+            } else if (state === 'register') {
+                title.innerText = 'Đăng ký tài khoản mới';
+                lblPassword.innerText = 'MẬT KHẨU *';
+                document.getElementById('authPassword').placeholder = "Đặt mật khẩu (ít nhất 6 ký tự)...";
+                lblConfirmPassword.innerText = 'NHẬP LẠI MẬT KHẨU *';
+
+                dUsername.classList.remove('hidden');
+                dFullName.classList.remove('hidden');
+                dPhone.classList.remove('hidden');
+                dCCCD.classList.remove('hidden');
+                dEmail.classList.remove('hidden');
+                dPassword.classList.remove('hidden');
+                dConfirmPassword.classList.remove('hidden');
+                dSecurityKey.classList.remove('hidden');
+
+                lToggle.classList.remove('hidden');
+                btnSubmit.innerText = 'ĐĂNG KÝ TÀI KHOẢN';
+            } else if (state === 'forgot') {
+                title.innerText = 'Khôi phục mật khẩu bảo mật';
+                lblPassword.innerText = 'MẬT KHẨU MỚI *';
+                document.getElementById('authPassword').placeholder = "Đặt mật khẩu mới...";
+                lblConfirmPassword.innerText = 'NHẬP LẠI MẬT KHẨU MỚI *';
+
+                dUsername.classList.remove('hidden');
+                dPhone.classList.remove('hidden');
+                dCCCD.classList.remove('hidden');
+                dSecurityKey.classList.remove('hidden');
+                
+                dPassword.classList.remove('hidden');
+                dConfirmPassword.classList.remove('hidden');
+
+                lToggle.classList.remove('hidden');
+                btnSubmit.innerText = 'XÁC THỰC & ĐỔI MẬT KHẨU';
+            }
+        }
+
+        // Xử lý Sự kiện Click Xác nhận của Trình Quản Lý Auth
+        function handleAuthSubmit() {
+            const username = document.getElementById('authUsername').value.trim();
+            const fullName = document.getElementById('authFullName').value.trim();
+            const phone = document.getElementById('authPhone').value.trim();
+            const cccd = document.getElementById('authCCCD').value.trim();
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+            const confirmPassword = document.getElementById('authConfirmPassword').value.trim();
+            const securityKey = document.getElementById('authSecurityKey').value.trim();
+
+            let accounts = JSON.parse(localStorage.getItem('user_accounts')) || [];
+
+            // 1. XỬ LÝ ĐĂNG KÝ
+            if (authState === 'register') {
+                if (!username || username.length < 3) return alert('Tên đăng nhập phải viết liền không dấu, từ 3 ký tự trở lên!');
+                
+                // NGĂN CHẶN ĐĂNG KÝ CHỨA CHỮ "ADMIN"
+                if (username.toLowerCase().includes('admin')) {
+                    return alert('LỖI BẢO MẬT: Bạn không được phép tạo tài khoản có chứa chữ "ADMIN"!');
+                }
+
+                if (!fullName) return alert('Vui lòng nhập Họ và Tên của bạn!');
+                if (!phone || phone.length < 10) return alert('Số điện thoại không hợp lệ (ít nhất 10 số)!');
+                if (!cccd || cccd.length < 12) return alert('Số CCCD phải bao gồm đầy đủ 12 chữ số!');
+                if (!email || !validateEmail(email)) return alert('Email không hợp lệ!');
+                if (!password || password.length < 6) return alert('Mật khẩu phải từ 6 ký tự trở lên!');
+                if (password !== confirmPassword) return alert('Mật khẩu nhập lại không trùng khớp!');
+                if (!securityKey || securityKey.length !== 6 || isNaN(securityKey)) {
+                    return alert('Mã Key bảo mật bắt buộc phải có độ dài đúng 6 số!');
+                }
+
+                if (accounts.some(acc => acc.username.toLowerCase() === username.toLowerCase())) {
+                    return alert('Tên đăng nhập này đã tồn tại!');
+                }
+                if (accounts.some(acc => acc.email === email)) {
+                    return alert('Địa chỉ Gmail này đã được đăng ký!');
+                }
+                if (accounts.some(acc => acc.phone === phone)) {
+                    return alert('Số điện thoại này đã được sử dụng!');
+                }
+
+                const newAccount = { 
+                    username, 
+                    fullName, 
+                    phone, 
+                    cccd, 
+                    email, 
+                    password, 
+                    securityKey, 
+                    history: [] 
+                };
+
+                accounts.push(newAccount);
+                localStorage.setItem('user_accounts', JSON.stringify(accounts));
+                alert('Tạo tài khoản thành công! Hãy tiến hành đăng nhập bằng tài khoản vừa tạo.');
+                clearAuthForm();
+                switchAuthState('login');
+            } 
+            
+            // 2. XỬ LÝ ĐĂNG NHẬP
+            else if (authState === 'login') {
+                if (!username) return alert('Vui lòng nhập Tên đăng nhập!');
+                if (!password) return alert('Vui lòng nhập Mật khẩu!');
+
+                const user = accounts.find(acc => acc.username.toLowerCase() === username.toLowerCase() && acc.password === password);
+                if (!user) {
+                    return alert('Tài khoản hoặc mật khẩu không đúng. Vui lòng kiểm tra lại!');
+                }
+                
+                currentUser = user;
+                localStorage.setItem('current_session', JSON.stringify(user));
+                updateUIForLoggedInUser();
+                updateTotal(); // Tính toán lại giá tiền sau khi đăng nhập (Đặc quyền admin)
+                closeAuthModal();
+
+                // HIỂN THỊ THÔNG BÁO CHÀO MỪNG CÁ NHÂN HÓA
+                if (user.username.toUpperCase() === 'ADMIN22122002') {
+                    alert('Xin chào ADMIN!');
+                } else {
+                    alert(`Xin chào ${user.username}!`);
+                }
+            } 
+            
+            // 3. XỬ LÝ QUÊN MẬT KHẨU (XÁC THỰC 5 LỚP)
+            else if (authState === 'forgot') {
+                if (!username) return alert('Vui lòng nhập Tên đăng nhập để khôi phục!');
+                if (!phone) return alert('Vui lòng nhập Số điện thoại xác minh!');
+                if (!cccd) return alert('Vui lòng nhập Số CCCD xác minh!');
+                if (!securityKey) return alert('Vui lòng nhập Mã Key bảo mật (6 số)!');
+                if (!password || password.length < 6) return alert('Mật khẩu mới phải từ 6 ký tự trở lên!');
+                if (password !== confirmPassword) return alert('Nhập lại mật khẩu mới không trùng khớp!');
+
+                // Kiểm tra thông tin tài khoản
+                const userIdx = accounts.findIndex(acc => 
+                    acc.username.toLowerCase() === username.toLowerCase() && 
+                    acc.phone === phone && 
+                    acc.cccd === cccd && 
+                    acc.securityKey === securityKey
+                );
+
+                if (userIdx === -1) {
+                    return alert('XÁC THỰC THẤT BẠI!\nCác thông tin xác thực không chính xác. Vui lòng kiểm tra lại thật kỹ!');
+                }
+
+                // Lưu mật khẩu mới
+                accounts[userIdx].password = password;
+                localStorage.setItem('user_accounts', JSON.stringify(accounts));
+
+                const session = JSON.parse(localStorage.getItem('current_session'));
+                if (session && session.username.toLowerCase() === username.toLowerCase()) {
+                    session.password = password;
+                    localStorage.setItem('current_session', JSON.stringify(session));
+                }
+
+                alert('XÁC THỰC THÀNH CÔNG!\nMật khẩu của bạn đã được thay đổi. Hãy đăng nhập lại!');
+                clearAuthForm();
+                switchAuthState('login');
+            }
+        }
+
+        function checkLoginSession() {
+            const session = JSON.parse(localStorage.getItem('current_session'));
+            if (session) {
+                currentUser = session;
+                updateUIForLoggedInUser();
+                updateTotal();
+            }
+        }
+
+        function updateUIForLoggedInUser() {
+            if (!currentUser) return;
+            
+            const displayTitle = currentUser.username.toUpperCase() === 'ADMIN22122002' ? '👑 Quản Trị Viên' : currentUser.fullName;
+
+            document.getElementById('quickAuthArea').innerHTML = `
+                <button onclick="toggleDashboardScroll()" class="glass-btn bg-iosGreen/10 border-2 border-iosGreen/30 px-4 py-2.5 rounded-full text-xs font-black text-iosGreen flex items-center gap-1.5 hover:bg-iosGreen/20">
+                    <span class="w-2 h-2 rounded-full bg-iosGreen animate-pulse"></span> ${displayTitle}
+                </button>
+            `;
+
+            document.getElementById('dashboardUsername').innerText = `Xin chào, ${displayTitle} (${currentUser.username})`;
+            document.getElementById('dashboardEmail').innerText = currentUser.email;
+            document.getElementById('emailInput').value = currentUser.email; 
+
+            document.getElementById('userDashboard').classList.remove('hidden');
+            renderHistoryTable();
+        }
+
+        function toggleDashboardScroll() {
+            const section = document.getElementById('userDashboard');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function logout() {
+            localStorage.removeItem('current_session');
+            currentUser = null;
+            document.getElementById('userDashboard').classList.add('hidden');
+            document.getElementById('quickAuthArea').innerHTML = `
+                <button onclick="openAuthModal('login')" class="glass-btn liquid-glass px-4 py-2.5 rounded-full text-xs font-black flex items-center gap-1.5 hover:opacity-85 border-2">
+                    <i data-lucide="user" class="w-4 h-4"></i> Tài khoản
+                </button>
+            `;
+            document.getElementById('emailInput').value = '';
+            updateTotal(); // Reset lại hiển thị giá chuẩn sau khi đăng xuất
+            alert('Đã đăng xuất tài khoản!');
+            lucide.createIcons();
+        }
+
+        function renderHistoryTable() {
+            const container = document.getElementById('historyTableBody');
+            if (!currentUser) return;
+
+            const accounts = JSON.parse(localStorage.getItem('user_accounts')) || [];
+            const userDB = accounts.find(acc => acc.username.toLowerCase() === currentUser.username.toLowerCase());
+            const history = userDB ? userDB.history : [];
+
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-8 opacity-80 text-xs italic font-bold">Bạn chưa thực hiện giao dịch mua bán nào.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            container.innerHTML = history.slice().reverse().map(item => {
+                const badgeColor = item.status === 'Thành công' 
+                    ? 'bg-iosGreen/10 text-iosGreen border-iosGreen/20' 
+                    : 'bg-iosRed/10 text-iosRed border-iosRed/20';
+
+                const totalText = item.total === 0 ? 'MIỄN PHÍ' : `${item.total.toLocaleString('vi-VN')}đ`;
+
+                return `
+                    <tr class="border-b border-slate-300 dark:border-slate-700 hover:bg-slate-500/5 transition font-bold text-xs">
+                        <td class="py-3 px-2 font-mono opacity-80">${item.dateTime}</td>
+                        <td class="py-3 px-2 font-black uppercase text-slate-800 dark:text-slate-100">${item.network}</td>
+                        <td class="py-3 px-2">${item.denom.toLocaleString('vi-VN')}đ</td>
+                        <td class="py-3 px-2 text-center">${item.quantity}</td>
+                        <td class="py-3 px-2 text-right font-black text-iosGreen">${totalText}</td>
+                        <td class="py-3 px-2 text-center">
+                            <span class="inline-block text-[10px] font-black px-2.5 py-1 rounded-full border ${badgeColor}">
+                                ${item.status}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        /* --- XỬ LÝ ĐẶT HÀNG --- */
+
+        document.getElementById('btnOrder').addEventListener('click', () => {
+            if (!currentUser) {
+                alert('Vui lòng đăng nhập tài khoản trước khi thực hiện mua thẻ cào!');
+                openAuthModal('login');
+                return;
+            }
+
+            if (selectedDenom === null || quantity === 0) {
+                return alert('Vui lòng chọn mệnh giá và số lượng thẻ cần mua!');
+            }
+
+            const email = document.getElementById('emailInput').value.trim();
+            if (!email || !validateEmail(email)) {
+                alert('Vui lòng kiểm tra và nhập đúng Email nhận thẻ!');
+                document.getElementById('emailInput').focus();
+                return;
+            }
+
+            const isAdmin = currentUser.username.toUpperCase() === 'ADMIN22122002';
+            const total = isAdmin ? 0 : (selectedDenom * quantity);
+            const memo = `MUA ${selectedNetwork.toUpperCase()} ${selectedDenom/1000}K x${quantity}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/\s+/g, " ");
+
+            document.getElementById('qrAmount').innerText = total.toLocaleString('vi-VN') + ' đ';
+            document.getElementById('qrMemo').innerText = memo;
+
+            // XỬ LÝ GIAO DIỆN THANH TOÁN CHO ADMIN (KHÔNG CẦN QUÉT QR)
+            if (isAdmin) {
+                document.getElementById('paymentTitle').innerText = 'Xác nhận Đơn hàng Admin';
+                document.getElementById('qrContainer').classList.add('hidden');
+                document.getElementById('paymentCountdownArea').classList.add('hidden');
+            } else {
+                document.getElementById('paymentTitle').innerText = 'Quét mã VietQR';
+                document.getElementById('qrContainer').classList.remove('hidden');
+                document.getElementById('paymentCountdownArea').classList.remove('hidden');
+                
+                // VietQR Api
+                const bankId = 'TCB';
+                const accountNo = '99999999983868';
+                const template = 'qr_only';
+                const accountName = 'PHAM VAN HOA';
+                const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.png?amount=${total}&addInfo=${encodeURIComponent(memo)}&accountName=${encodeURIComponent(accountName)}`;
+                document.getElementById('qrImage').src = qrUrl;
+            }
+
+            const modal = document.getElementById('paymentModal');
+            const content = document.getElementById('modalContent');
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            content.classList.remove('translate-y-10');
+
+            if (!isAdmin) {
+                startTimer(1019);
+            }
+        });
+
+        function startTimer(duration) {
+            clearInterval(timer);
+            let timeRemaining = duration;
+            const display = document.getElementById('countdown');
+
+            function updateDisplay() {
+                let minutes = Math.floor(timeRemaining / 60);
+                let seconds = timeRemaining % 60;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = `${minutes}:${seconds}`;
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timer);
+                    closeModal();
+                    alert("Thời gian thanh toán đã hết hạn!");
+                }
+                timeRemaining--;
+            }
+            updateDisplay();
+            timer = setInterval(updateDisplay, 1000);
+        }
+
+        function closeModal() {
+            clearInterval(timer);
+            const modal = document.getElementById('paymentModal');
+            const content = document.getElementById('modalContent');
+            modal.classList.add('pointer-events-none', 'opacity-0');
+            content.classList.add('translate-y-10');
+        }
+
+        document.getElementById('btnCancel').addEventListener('click', () => {
+            saveTransactionToHistory('Thất bại');
+            closeModal();
+        });
+
+        document.getElementById('btnPaid').addEventListener('click', () => {
+            const email = document.getElementById('emailInput').value.trim();
+            
+            saveTransactionToHistory('Thành công');
+            closeModal();
+            
+            document.getElementById('targetEmail').innerText = email;
+            const alertBox = document.getElementById('successAlert');
+            alertBox.classList.remove('hidden');
+            setTimeout(() => {
+                alertBox.firstElementChild.classList.remove('scale-95');
+                alertBox.firstElementChild.classList.add('scale-100');
+            }, 10);
+        });
+
+        function saveTransactionToHistory(status) {
+            if (!currentUser) return;
+
+            const now = new Date();
+            const formattedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} ${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
+
+            const isAdmin = currentUser.username.toUpperCase() === 'ADMIN22122002';
+            const total = isAdmin ? 0 : (selectedDenom * quantity);
+
+            const newOrder = {
+                id: 'ORD' + Date.now(),
+                dateTime: formattedTime,
+                network: selectedNetwork,
+                denom: selectedDenom,
+                quantity: quantity,
+                total: total,
+                status: status
+            };
+
+            let accounts = JSON.parse(localStorage.getItem('user_accounts')) || [];
+            const userIdx = accounts.findIndex(acc => acc.username.toLowerCase() === currentUser.username.toLowerCase());
+
+            if (userIdx !== -1) {
+                accounts[userIdx].history.push(newOrder);
+                localStorage.setItem('user_accounts', JSON.stringify(accounts));
+                
+                currentUser = accounts[userIdx];
+                localStorage.setItem('current_session', JSON.stringify(currentUser));
+                renderHistoryTable();
+            }
+        }
+
+        document.getElementById('btnCloseAlert').addEventListener('click', () => {
+            const alertBox = document.getElementById('successAlert');
+            alertBox.classList.add('hidden');
+        });
+
+        function validateEmail(email) {
+            return String(email)
+                .toLowerCase()
+                .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        }
+    </script>
+</body>
+</html>
